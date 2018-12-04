@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const {generateMessage} = require('./utils/message');
+const {generateMessage,generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname,'/../public');
 const port = process.env.PORT || 3000;
@@ -38,6 +38,14 @@ io.on('connection',(socket) => {
     //     createdAt: new Date().getTime()
     // });
   });
+
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
+  });
+
+
+
+  //https://www.google.com/maps?q=34.025591299999995,-118.37538749999999
 
   socket.on('disconnect',()=>{
     console.log('Disconnected from server');
